@@ -40,11 +40,11 @@ FNAME_C := kmembugs_test
 # your box to the appropriate path to the kernel src tree for that arch.
 ifeq ($(ARCH),arm)
   # *UPDATE* 'KDIR' below to point to the ARM Linux kernel source tree on your box
-  KDIR ?= ~/rpi_work/kernel_rpi/linux
+  KDIR ?= ~/workspace/linux_kernel_5.10.72_2.2.0/tn-kernel/
 else ifeq ($(ARCH),arm64)
   # *UPDATE* 'KDIR' below to point to the ARM64 (Aarch64) Linux kernel source
   # tree on your box
-  KDIR ?= ~/kernel/linux-5.4
+  KDIR ?= ~/workspace/linux_kernel_5.10.72_2.2.0/tn-kernel/
 else ifeq ($(ARCH),powerpc)
   # *UPDATE* 'KDIR' below to point to the PPC64 Linux kernel source tree on your box
   KDIR ?= ~/kernel/linux-5.0
@@ -95,7 +95,8 @@ endif
 # out the following line
 ccflags-y   += -DDYNAMIC_DEBUG_MODULE
 
-KMODDIR ?= /lib/modules/$(shell uname -r)
+#KMODDIR ?= /lib/modules/$(shell uname -r)
+KMODDIR ?= /home/pico/workspace/linux_kernel_5.10.72_2.2.0/modules/lib/modules/5.10.72-00744-g1a5d3bfc2330
 STRIP := ${CROSS_COMPILE}strip
 
 # gcc-10 issue:
