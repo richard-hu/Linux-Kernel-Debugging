@@ -51,6 +51,8 @@ MODULE_VERSION("0.1");
 static bool kasan_multishot;
 #endif
 
+#define ALLOC_SIZE 128
+
 int debugfs_simple_intf_init(void);
 extern struct dentry *gparent;
 static struct irq_work irqwork;
@@ -88,11 +90,11 @@ int umr_slub(void)
 	volatile char *q = NULL;
 
 	pr_info("testcase 10: simple UMR on slab memory\n");
-	q = kmalloc(32, GFP_KERNEL);
+	q = kmalloc(ALLOC_SIZE, GFP_KERNEL);
 	if (unlikely(!q))
 		return -ENOMEM;
 	pr_info("q[3] is 0x%x\n", q[3]);
-	print_hex_dump_bytes("q: ", DUMP_PREFIX_OFFSET, (void *)q, 32);
+	print_hex_dump_bytes("q: ", DUMP_PREFIX_OFFSET, (void *)q, ALLOC_SIZE);
 	kfree((char *)q);
 
 	return 0;
@@ -276,7 +278,7 @@ int dynamic_mem_oob_right(int mode)
 {
 	volatile char *kptr, ch = 0;
 	char *volatile ptr;
-	size_t sz = 32;
+	size_t sz = ALLOC_SIZE;
 
 	kptr = kmalloc(sz, GFP_KERNEL);
 	if (unlikely(!kptr))
@@ -307,7 +309,7 @@ int dynamic_mem_oob_right(int mode)
 int dynamic_mem_oob_left(int mode)
 {
 	volatile char *kptr, *ptr, ch = 'x';
-	size_t sz = 32;
+	size_t sz = ALLOC_SIZE;
 
 	kptr = (char *)kmalloc(sz, GFP_KERNEL);
 	if (unlikely(!kptr))
@@ -327,7 +329,7 @@ int dynamic_mem_oob_left(int mode)
 int uaf(void)
 {
 	volatile char *kptr, *ptr;
-	size_t sz = 32;
+	size_t sz = ALLOC_SIZE;
 
 	kptr = (char *)kmalloc(sz, GFP_KERNEL);
 	if (unlikely(!kptr))
@@ -346,7 +348,7 @@ int uaf(void)
 int double_free(void)
 {
 	volatile char *kptr, *ptr;
-	size_t sz = 32;
+	size_t sz = ALLOC_SIZE;
 
 	kptr = (char *)kmalloc(sz, GFP_KERNEL);
 	if (unlikely(!kptr))
